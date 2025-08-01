@@ -6,109 +6,88 @@
 // Wait for DOM to be ready
 document.addEventListener('DOMContentLoaded', function() {
     
-    // Define CommentStartRef custom element
-    class CommentStartRef extends HTMLElement {
-        connectedCallback() {
-            const bid = this.getAttribute('bid');
-            this.setAttribute('data-comment-start', bid);
-            this.classList.add('comment-start-ref');
-        }
-    }
+    // Note: Custom element names must contain hyphens to be valid
+    // Since your existing elements don't follow this rule, we'll enhance them directly
     
-    // Define CommentEndRef custom element
-    class CommentEndRef extends HTMLElement {
-        connectedCallback() {
-            const bid = this.getAttribute('bid');
-            this.setAttribute('data-comment-end', bid);
-            this.classList.add('comment-end-ref');
-        }
-    }
-    
-    // Define SuggestedDelete custom element
-    class SuggestedDelete extends HTMLElement {
-        connectedCallback() {
-            const by = this.getAttribute('by');
-            const dated = this.getAttribute('dated');
+    // Handle existing custom elements (they don't follow kebab-case rule)
+    // We'll enhance them directly instead of registering as custom elements
+    function enhanceCustomElements() {
+        // Handle commentStartRef elements
+        document.querySelectorAll('commentStartRef').forEach(element => {
+            const bid = element.getAttribute('bid');
+            element.setAttribute('data-comment-start', bid);
+            element.classList.add('comment-start-ref');
+        });
+        
+        // Handle commentEndRef elements
+        document.querySelectorAll('commentEndRef').forEach(element => {
+            const bid = element.getAttribute('bid');
+            element.setAttribute('data-comment-end', bid);
+            element.classList.add('comment-end-ref');
+        });
+        
+        // Handle suggestedDelete elements
+        document.querySelectorAll('suggestedDelete').forEach(element => {
+            const by = element.getAttribute('by');
+            const dated = element.getAttribute('dated');
             
-            this.classList.add('suggested-delete');
+            element.classList.add('suggested-delete');
             
-            // Add tooltip with metadata
             let title = 'Suggested deletion';
             if (by) title += ' by ' + by;
             if (dated) title += ' on ' + new Date(dated).toLocaleDateString();
-            this.setAttribute('title', title);
-        }
-    }
-    
-    // Define SuggestedInsert custom element
-    class SuggestedInsert extends HTMLElement {
-        connectedCallback() {
-            const by = this.getAttribute('by');
-            const dated = this.getAttribute('dated');
+            element.setAttribute('title', title);
+        });
+        
+        // Handle suggestedInsert elements
+        document.querySelectorAll('suggestedInsert').forEach(element => {
+            const by = element.getAttribute('by');
+            const dated = element.getAttribute('dated');
             
-            this.classList.add('suggested-insert');
+            element.classList.add('suggested-insert');
             
-            // Add tooltip with metadata
             let title = 'Suggested insertion';
             if (by) title += ' by ' + by;
             if (dated) title += ' on ' + new Date(dated).toLocaleDateString();
-            this.setAttribute('title', title);
-        }
-    }
-    
-    // Define NoteRef custom element
-    class NoteRef extends HTMLElement {
-        connectedCallback() {
-            const bid = this.getAttribute('bid');
-            this.classList.add('note-ref');
+            element.setAttribute('title', title);
+        });
+        
+        // Handle noteref elements
+        document.querySelectorAll('noteref').forEach(element => {
+            const bid = element.getAttribute('bid');
+            element.classList.add('note-ref');
             
-            // Create reference number from bid (extract number if possible)
             let refNum = bid ? bid.replace(/[^0-9]/g, '') || '1' : '1';
-            this.innerHTML = '<sup>[' + refNum + ']</sup>';
+            element.innerHTML = '<sup>[' + refNum + ']</sup>';
             
-            // Add click handler to scroll to footnote
-            this.addEventListener('click', () => {
+            element.addEventListener('click', () => {
                 const footnote = document.querySelector(`footnote[bid="${bid}"]`);
                 if (footnote) {
                     footnote.scrollIntoView({ 
                         behavior: 'smooth', 
                         block: 'center' 
                     });
-                    // Add temporary highlight class for CSS to handle
                     footnote.classList.add('footnote-highlighted');
                     setTimeout(() => {
                         footnote.classList.remove('footnote-highlighted');
                     }, 2000);
                 }
             });
-        }
-    }
-    
-    // Define Footnote custom element
-    class Footnote extends HTMLElement {
-        connectedCallback() {
-            const bid = this.getAttribute('bid');
-            this.classList.add('footnote');
-            
-            // Add footnote number
-            let refNum = bid ? bid.replace(/[^0-9]/g, '') || '1' : '1';
-            this.innerHTML = '<strong>[' + refNum + ']</strong> ' + this.innerHTML;
-        }
-    }
-    
-    // Register all custom elements
-    try {
-        customElements.define('commentstartref', CommentStartRef);
-        customElements.define('commentendref', CommentEndRef);
-        customElements.define('suggesteddelete', SuggestedDelete);
-        customElements.define('suggestedinsert', SuggestedInsert);
-        customElements.define('noteref', NoteRef);
-        customElements.define('footnote', Footnote);
+        });
         
-        console.log('Semantic document custom elements registered successfully');
-    } catch (error) {
-        console.error('Error registering custom elements:', error);
+        // Handle footnote elements
+        document.querySelectorAll('footnote').forEach(element => {
+            const bid = element.getAttribute('bid');
+            element.classList.add('footnote');
+            
+            let refNum = bid ? bid.replace(/[^0-9]/g, '') || '1' : '1';
+            element.innerHTML = '<strong>[' + refNum + ']</strong> ' + element.innerHTML;
+        });
     }
+    
+    // Run the enhancement
+    enhanceCustomElements();
+    console.log('Semantic document custom elements enhanced successfully');
     
     // Handle list paragraph numbering
     function enhanceListParagraphs() {
@@ -148,7 +127,7 @@ document.addEventListener('DOMContentLoaded', function() {
     window.SemanticDoc = {
         // Toggle comment visibility
         toggleComments: function(show = true) {
-            const commentRefs = document.querySelectorAll('commentstartref, commentendref');
+            const commentRefs = document.querySelectorAll('commentStartRef, commentEndRef');
             commentRefs.forEach(ref => {
                 if (show) {
                     ref.classList.add('comments-visible');
@@ -171,8 +150,8 @@ document.addEventListener('DOMContentLoaded', function() {
         // Get all suggested changes
         getSuggestedChanges: function() {
             return {
-                deletions: document.querySelectorAll('suggesteddelete'),
-                insertions: document.querySelectorAll('suggestedinsert')
+                deletions: document.querySelectorAll('suggestedDelete'),
+                insertions: document.querySelectorAll('suggestedInsert')
             };
         },
         
