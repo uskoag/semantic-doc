@@ -44,14 +44,14 @@ p {
 }
 
 /* Numbered List Paragraphs */
-p[listParaNum] {
+p[num] {
     position: relative;
     margin-left: 40px;
     padding-left: 10px;
 }
 
-p[listParaNum]:before {
-    content: attr(listParaNum);
+p[num]:before {
+    content: attr(num);
     position: absolute;
     left: -40px;
     font-weight: bold;

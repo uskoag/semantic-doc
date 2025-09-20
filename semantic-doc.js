@@ -91,9 +91,9 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Handle list paragraph numbering
     function enhanceListParagraphs() {
-        const listParas = document.querySelectorAll('p[listParaNum]');
+        const listParas = document.querySelectorAll('p[num]');
         listParas.forEach(para => {
-            const listNum = para.getAttribute('listParaNum');
+            const listNum = para.getAttribute('num');
             para.classList.add('list-paragraph');
             para.setAttribute('data-list-num', listNum);
         });
